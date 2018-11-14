@@ -50,7 +50,7 @@ namespace PanvivaBot
             if (turnContext.Activity.Type == ActivityTypes.Message)
             {
                 // Echo back to the user whatever they typed.
-                var responseMessage = $"Searching for '{turnContext.Activity.Text}'\n";
+                var responseMessage = $"Searching for information about '{turnContext.Activity.Text}'\n";
                 await turnContext.SendActivityAsync(responseMessage);
                 var panvivaResponse = await PanvivaAPI.NaturalLanguageSearchAsync(turnContext.Activity.Text);
                 await turnContext.SendActivityAsync($"I found the following: {panvivaResponse}");
@@ -59,7 +59,7 @@ namespace PanvivaBot
             {
                 if (turnContext.Activity.MembersAdded[0].Id != "default-bot")
                 {
-                    await turnContext.SendActivityAsync($"Hello from the Panviva Bot!\n\nI can help you find things in Panviva's knowledge store.  Type in a search term, and I'll see what I can find.");
+                    await turnContext.SendActivityAsync($"Hello from the Panviva Bot!\n\nI can help you find information in Panviva's knowledge base.  Type in a topic of interest, and I'll see what I can find.");
                 }
             }
             else
