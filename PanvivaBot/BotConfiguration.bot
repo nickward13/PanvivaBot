@@ -14,11 +14,11 @@
             "type": "endpoint",
             "name": "production",
             "endpoint": "https://panvivabot20181114021140.azurewebsites.net/api/messages",
-            "appId": "",
-            "appPassword": "",
+            "appId": "1e64d29f-abeb-4c13-90a3-6739350990ff",
+            "appPassword": "WRsE1BFaXr90SmMPorHrUQ==!KAN/O1oLO+slIBOpaZirupeSl479B751hIRWtThXbCs=",
             "id": "1"
         }
     ],
-    "padlock": "",
+    "padlock": "QhsJo9GmFwYFBq3+rluLMQ==!b6DPOk61ncWPz7exx1rUYvstL7KAsD6XUFmb4co+u5TMSFfOxJw6/auGZ6mct5qO",
     "version": "2.0"
 }
