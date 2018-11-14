@@ -53,7 +53,20 @@ namespace PanvivaBot
                 var responseMessage = $"Searching for information about '{turnContext.Activity.Text}'\n";
                 await turnContext.SendActivityAsync(responseMessage);
                 var panvivaResponse = await PanvivaAPI.NaturalLanguageSearchAsync(turnContext.Activity.Text);
-                await turnContext.SendActivityAsync($"I found the following: {panvivaResponse}");
+                if (panvivaResponse.Count > 0)
+                {
+                    responseMessage = $"I found the following:";
+                    foreach (var response in panvivaResponse)
+                    {
+                        responseMessage += $"\n- {response.ResponseContent} in category '{response.Category}'";
+                    }
+
+                    await turnContext.SendActivityAsync(responseMessage);
+                }
+                else
+                {
+                    await turnContext.SendActivityAsync($"I couldn't find anything about '{turnContext.Activity.Text}'");
+                }
             }
             else if (turnContext.Activity.Type == ActivityTypes.ConversationUpdate)
             {
