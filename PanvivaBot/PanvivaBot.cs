@@ -49,36 +49,54 @@ namespace PanvivaBot
             // see https://aka.ms/about-bot-activity-message to learn more about the message and other activity types
             if (turnContext.Activity.Type == ActivityTypes.Message)
             {
-                // Echo back to the user whatever they typed.
-                var responseMessage = $"Searching for information about '{turnContext.Activity.Text}'\n";
-                await turnContext.SendActivityAsync(responseMessage);
-                var panvivaResponse = await PanvivaAPI.NaturalLanguageSearchAsync(turnContext.Activity.Text);
-                if (panvivaResponse.Count > 0)
+                if (string.Equals(turnContext.Activity.Text.ToUpper(), "HI") ||
+                    string.Equals(turnContext.Activity.Text.ToUpper(), "HELLO") ||
+                    string.Equals(turnContext.Activity.Text.ToUpper(), "HELP"))
                 {
-                    responseMessage = $"I found the following:";
-                    foreach (var response in panvivaResponse)
-                    {
-                        responseMessage += $"\n- {response.ResponseContent} in category '{response.Category}'";
-                    }
-
-                    await turnContext.SendActivityAsync(responseMessage);
+                    await SendGreetingAsync(turnContext);
                 }
                 else
                 {
-                    await turnContext.SendActivityAsync($"I couldn't find anything about '{turnContext.Activity.Text}'");
+                    await SearchPanvivaAndSendResultsToUserAsync(turnContext);
                 }
             }
             else if (turnContext.Activity.Type == ActivityTypes.ConversationUpdate)
             {
                 if (turnContext.Activity.MembersAdded[0].Id != "default-bot")
                 {
-                    await turnContext.SendActivityAsync($"Hello from the Panviva Bot!\n\nI can help you find information in Panviva's knowledge base.  Type in a topic of interest, and I'll see what I can find.");
+                    await SendGreetingAsync(turnContext);
                 }
             }
             else
             {
                 await turnContext.SendActivityAsync($"{turnContext.Activity.Type} event detected");
             }
+        }
+
+        private static async Task SearchPanvivaAndSendResultsToUserAsync(ITurnContext turnContext)
+        {
+            var responseMessage = $"Searching for information about '{turnContext.Activity.Text}'\n";
+            await turnContext.SendActivityAsync(responseMessage);
+            var panvivaResponse = await PanvivaAPI.NaturalLanguageSearchAsync(turnContext.Activity.Text);
+            if (panvivaResponse.Count > 0)
+            {
+                responseMessage = $"I found the following:";
+                foreach (var response in panvivaResponse)
+                {
+                    responseMessage += $"\n- {response.ResponseContent} in category '{response.Category}'";
+                }
+
+                await turnContext.SendActivityAsync(responseMessage);
+            }
+            else
+            {
+                await turnContext.SendActivityAsync($"I couldn't find anything about '{turnContext.Activity.Text}'");
+            }
+        }
+
+        private static async Task SendGreetingAsync(ITurnContext turnContext)
+        {
+            await turnContext.SendActivityAsync($"Hello from the Panviva Bot!\n\nI can help you find information in Panviva's knowledge base.  Type in a topic of interest, and I'll see what I can find.");
         }
     }
 }
